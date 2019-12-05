@@ -1,0 +1,261 @@
+<html>
+  <head>
+      <title>Your Health and Mine</title>
+      <link rel="stylesheet" href="./Health Dashboard_files/bootstrap.min.css">
+      <script src="./Health Dashboard_files/jquery.min.js.download"></script>
+      <script src="./Health Dashboard_files/popper.min.js.download"></script>
+      <script src="./Health Dashboard_files/bootstrap.min.js.download"></script>
+      <script src="./Health Dashboard_files/Chart.min.js.download"></script> 
+      <script src="./Health Dashboard_files/d3.v5.min.js.download"></script>
+      <link rel="stylesheet" href="css/style.css">
+
+      <style>
+        .jumbotron {background-image: url("https://image.shutterstock.com/image-photo/medical-staff-people-group-team-260nw-1202989183.jpg");
+            background-size: cover;}
+      </style>
+
+      <script>
+        function getURLParameters(paramName) 
+        {
+          var sURL = window.document.URL.toString();
+          
+          if (sURL.indexOf("?") > 0)
+          {
+            var arrParams = sURL.split("?");
+              
+            var arrURLParams = arrParams[1].split("&");
+            
+            var arrParamNames = new Array(arrURLParams.length);
+            var arrParamValues = new Array(arrURLParams.length);
+            
+            var i = 0;
+            for (i=0;i<arrURLParams.length;i++)
+            {
+              var sParam =  arrURLParams[i].split("=");
+              arrParamNames[i] = sParam[0];
+              if (sParam[1] != "")
+                arrParamValues[i] = unescape(sParam[1]);
+              else
+                arrParamValues[i] = "No Value";
+            }
+            var value;
+            for (i=0;i<arrURLParams.length;i++)
+            {
+                if(arrParamNames[i] == paramName){
+                  return arrParamValues[i];
+              }
+            }
+            return value;
+          }
+        }
+
+        function calculateBmi(weight,height) 
+        {
+            if(weight > 0 && height > 0)
+            {	
+              var finalBmi = weight/(height/100*height/100)
+              return finalBmi;
+              // if(finalBmi < 18.5){
+              // document.bmiForm.meaning.value = "That you are too thin."
+              // }
+              // if(finalBmi > 18.5 && finalBmi < 25){
+              // document.bmiForm.meaning.value = "That you are healthy."
+              // }
+              // if(finalBmi > 25){
+              // document.bmiForm.meaning.value = "That you have overweight."
+              // }
+            }
+          }
+
+        var weight = getURLParameters("weight");
+        var height = getURLParameters("height");
+        var systolic = getURLParameters("systolic");
+        var diastolic = getURLParameters("diastolic");
+
+        var bmi = calculateBmi(weight, height);
+        bmi = bmi.toFixed(2);
+    </script>
+  </head>
+  <body>
+      <div class="jumbotron text-center" style="margin-bottom:0">
+          <h1>HealthCare in Singapore</h1>
+        </div>
+        <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+          <a class="navbar-brand" href="index.html">Home</a>
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+              <span class="navbar-toggler-icon"></span>
+            </button>
+          <div class="collapse navbar-collapse" id="collapsibleNavbar">
+            <ul class="navbar-nav">
+              <li class="nav-item">
+                <a class="nav-link" href="startPage.html">BMI Checker</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="Health Dashboard.html">Disease Charts</a>
+              </li>
+            </ul>
+          </div>  
+        </nav>
+        <!--showing Chart-->
+        <div class="container" style="margin-top:30px">
+            <div class="row">
+              <div class="col">
+              </div>
+              <div class="col-sm-8"><div class="chartjs-size-monitor"><div class="chartjs-size-monitor-expand"><div class=""></div></div><div class="chartjs-size-monitor-shrink"><div class=""></div></div></div><div class="chartjs-size-monitor"><div class="chartjs-size-monitor-expand"><div class=""></div></div><div class="chartjs-size-monitor-shrink"><div class=""></div></div></div>
+              <center><h5 style="margin-top:30px; margin-bottom:30px;">Your results has been calculated in the below chart.<br /> Hover over the black dot to see your results.</h5></center>
+              <p style="margin-bottom:30px;"">The different colours show the range that you are in and you can see them as the charts label has mentioned. For more information, you can head over to Disease Charts page in the navigation bar above.</p>
+            <canvas id="myChart" width="821" height="461" style="display: block; height: 410px; width: 730px;" class="chartjs-render-monitor"></canvas>
+        <!--<div class="chart-container" style="position: relative; height:20vh; width:60vw;">-->
+            <canvas id="myBpChart" width="821" height="461" style="display: block; height: 410px; width: 730px;" class="chartjs-render-monitor"></canvas>
+        <!--</div>-->
+      
+      <!--Script to run the chart-->
+      <script>
+        var ctx = document.getElementById("myChart").getContext('2d');
+        var ds = [{"label":"Underweight ( <18.5)","data":[40.0,40.0,40.0,40.0,40.0,40.0,40.0,40.0,40.0,40.0,40.0,40.0,40.0,40.0,40.0,40.0,40.0,40.0,40.0,41.0,41.0,42.0,42.0,43.0,43.0,44.0,45.0,45.0,46.0,46.0,47.0,47.0,48.0,49.0,49.0,50.0,50.0,51.0,52.0,52.0,53.0,54.0,54.0,55.0,56.0,56.0,57.0,57.0,58.0,59.0,59.0,60.0,61.0,61.0,62.0,63.0,64.0,64.0,65.0,66.0,66.0,67.0,68.0,68.0,69.0,70.0,71.0,71.0,72.0,73.0,73.0,74.0,75.0,76.0,76.0,77.0,78.0,79.0,80.0,80.0,81.0],"backgroundColor":"gray","borderColor":"gray","borderWidth":1,"type":"line","lineTension":0},{"label":"Healthy Weight (18.5-25)","data":[42.0,42.0,43.0,44.0,44.0,45.0,46.0,46.0,47.0,48.0,48.0,49.0,50.0,51.0,51.0,52.0,53.0,54.0,54.0,55.0,56.0,57.0,57.0,58.0,59.0,60.0,60.0,61.0,62.0,63.0,63.0,64.0,65.0,66.0,67.0,68.0,68.0,69.0,70.0,71.0,72.0,73.0,73.0,74.0,75.0,76.0,77.0,78.0,79.0,80.0,80.0,81.0,82.0,83.0,84.0,85.0,86.0,87.0,88.0,89.0,90.0,91.0,92.0,93.0,94.0,95.0,96.0,97.0,98.0,99.0,99.0,101.0,102.0,103.0,104.0,105.0,106.0,107.0,108.0,109.0,110.0],"backgroundColor":"green","borderColor":"green","borderWidth":1,"type":"line","lineTension":0},{"label":"Overweight (25-30)","data":[50.0,51.0,52.0,53.0,53.0,54.0,55.0,56.0,57.0,57.0,58.0,59.0,60.0,61.0,62.0,63.0,63.0,64.0,65.0,66.0,67.0,68.0,69.0,70.0,71.0,72.0,73.0,73.0,74.0,75.0,76.0,77.0,78.0,79.0,80.0,81.0,82.0,83.0,84.0,85.0,86.0,87.0,88.0,89.0,90.0,91.0,92.0,93.0,95.0,96.0,97.0,98.0,99.0,100.0,101.0,102.0,103.0,104.0,106.0,107.0,108.0,109.0,110.0,111.0,112.0,114.0,115.0,116.0,117.0,118.0,119.0,121.0,122.0,123.0,124.0,126.0,127.0,128.0,129.0,131.0,132.0],"backgroundColor":"yellow","borderColor":"yellow","borderWidth":1,"type":"line","lineTension":0},{"label":"Obesity [I] (30-35)","data":[59.0,60.0,60.0,61.0,62.0,63.0,64.0,65.0,66.0,67.0,68.0,69.0,70.0,71.0,72.0,73.0,74.0,75.0,76.0,77.0,78.0,79.0,80.0,81.0,83.0,84.0,85.0,86.0,87.0,88.0,89.0,90.0,91.0,92.0,94.0,95.0,96.0,97.0,98.0,99.0,101.0,102.0,103.0,104.0,105.0,107.0,108.0,109.0,110.0,112.0,113.0,114.0,115.0,117.0,118.0,119.0,121.0,122.0,123.0,125.0,126.0,127.0,129.0,130.0,131.0,133.0,134.0,135.0,137.0,138.0,139.0,141.0,142.0,144.0,145.0,147.0,148.0,149.0,150.0,150.0,150.0],"backgroundColor":"orange","borderColor":"orange","borderWidth":1,"type":"line","lineTension":0},{"label":"Obesity [II] (35-40)","data":[67.0,68.0,69.0,70.0,71.0,72.0,73.0,75.0,76.0,77.0,78.0,79.0,80.0,81.0,82.0,84.0,85.0,86.0,87.0,88.0,89.0,91.0,92.0,93.0,94.0,96.0,97.0,98.0,99.0,101.0,102.0,103.0,104.0,106.0,107.0,108.0,110.0,111.0,112.0,114.0,115.0,116.0,118.0,119.0,121.0,122.0,123.0,125.0,126.0,128.0,129.0,131.0,132.0,133.0,135.0,136.0,138.0,139.0,141.0,142.0,144.0,145.0,147.0,148.0,150.0,150.0,150.0,150.0,150.0,150.0,150.0,150.0,150.0,150.0,150.0,150.0,150.0,150.0,150.0,150.0,150.0],"backgroundColor":"red","borderColor":"red","borderWidth":1,"type":"line","lineTension":0},{"label":"Obesity [III] (> 40)","data":[150.0,150.0,150.0,150.0,150.0,150.0,150.0,150.0,150.0,150.0,150.0,150.0,150.0,150.0,150.0,150.0,150.0,150.0,150.0,150.0,150.0,150.0,150.0,150.0,150.0,150.0,150.0,150.0,150.0,150.0,150.0,150.0,150.0,150.0,150.0,150.0,150.0,150.0,150.0,150.0,150.0,150.0,150.0,150.0,150.0,150.0,150.0,150.0,150.0,150.0,150.0,150.0,150.0,150.0,150.0,150.0,150.0,150.0,150.0,150.0,150.0,150.0,150.0,150.0,150.0,150.0,150.0,150.0,150.0,150.0,150.0,150.0,150.0,150.0,150.0,150.0,150.0,150.0,40.0,40.0,40.0],"backgroundColor":"darkred","borderColor":"darkred","borderWidth":1,"type":"line","lineTension":0}];
+        var label = [130,131,132,133,134,135,136,137,138,139,140,141,142,143,144,145,146,147,148,149,150,151,152,153,154,155,156,157,158,159,160,161,162,163,164,165,166,167,168,169,170,171,172,173,174,175,176,177,178,179,180,181,182,183,184,185,186,187,188,189,190,191,192,193,194,195,196,197,198,199,200];
+        var heightIn2 = height / 100;
+        ds.unshift({
+            label: 'Your BMI',
+            backgroundColor: 'rgba(0,0,0,0.7)',
+            borderColor: '#fff',
+            borderWidth: 1,
+            type: 'bubble',
+            data: [
+                {
+                    y: weight,
+                    x: heightIn2 * 100,
+                    r: 7
+                }
+            ]
+        });
+
+        var myChart = new Chart(ctx,
+            {
+                type: 'bar',
+                data: {
+                    labels: label,
+                    datasets: ds
+                },
+                options: {
+                    tooltips: {
+                        enabled: true,
+                        callbacks: {
+                            title: function() {
+                                return '';
+                            },
+                            label: function() {
+                                return 'Your BMI: ' + bmi;
+                            }
+
+                        },
+
+                    },
+                    scales: {
+                        yAxes: [{
+                            scaleLabel: {
+                                fontSize: 16,
+                                display: true,
+                                labelString: 'KG'
+                            }
+
+                        }]
+                        ,
+                        xAxes: [{
+                            scaleLabel: {
+                                display: true,
+                                fontSize: 16,
+                                labelString: 'CM'
+                            }
+                        }]
+
+                    },
+
+                    bezierCurve: false,
+                    animation: false,
+                    elements: {
+                        point: { radius: 0 },
+                        line: { tension: 0 }
+                    }
+                }
+            });
+    </script>
+    <script>
+      var bctx = document.getElementById("myBpChart").getContext('2d');
+      var dataset = [{label:"Ultra Low","data":[60.0]},{"label":"Low","data":[90.0,90.0,90.0],"backgroundColor":"blue","borderColor":"black","borderWidth":1,"type":"line","lineTension":0},{"label":"Ideal Blood Pressure","data":[120.0,120.0,120.0,120.0,120.0],"backgroundColor":"green","borderColor":"black","borderWidth":1,"type":"line","lineTension":0},{"label":"Pre-High Blood Pressure","data":[140.0,140.0,140.0,140.0,140.0,140.0],"backgroundColor":"yellow","borderColor":"black","borderWidth":1,"type":"line","lineTension":0},{"label":"High Blood Pressure","data":[190.0,190.0,190.0,190.0,190.0,190.0,190.0],"backgroundColor":"red","borderColor":"black","borderWidth":1,"type":"line","lineTension":0}];
+      var BPlabel = [40.0,50.0,60.0,70.0,80.0,90.0,100.0];
+      dataset.unshift({
+            label: 'Your Blood Pressure',
+            backgroundColor: 'rgba(0,0,0,0.7)',
+            borderColor: '#fff',
+            borderWidth: 1,
+            type: 'bubble',
+            data: [
+                {
+                    y: systolic,
+                    x: diastolic,
+                    r: 7
+                }
+            ]
+        });
+      var myBpChart = new Chart(bctx,
+            {
+                type: 'bar',
+                data: {
+                    labels: BPlabel,
+                    datasets: dataset
+                },
+                options: {
+                    tooltips: {
+                        enabled: true,
+                        callbacks: {
+                            title: function() {
+                                return '';
+                            },
+                            label: function() {
+                                return 'Your Blood Pressure is ' + systolic + "/" + diastolic;
+                            }
+
+                        },
+
+                    },
+                    scales: {
+                        yAxes: [{
+                            scaleLabel: {
+                                fontSize: 16,
+                                display: true,
+                                labelString: 'Systolic'
+                            }
+
+                        }]
+                        ,
+                        xAxes: [{
+                            scaleLabel: {
+                                display: true,
+                                fontSize: 16,
+                                labelString: 'Diastolic'
+                            }
+                        }]
+                    },
+                    bezierCurve: false,
+                    animation: false,
+                    elements: {
+                        point: { radius: 0 },
+                        line: { tension: 0 }
+                    }
+                }
+            });
+    </script>
+
+    </div>
+      <div class="col">
+        </div>
+    </div>
+  </div>
+
+    <div class="jumbotron text-center" style="margin-bottom:0">
+      <small>Banner and footer pictures are by shuttlecock</small>
+    </div>
+
+  </body>
+</html>

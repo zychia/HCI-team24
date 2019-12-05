@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<title>Your Health and Mine</title>
+	
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="./Health Dashboard_files/bootstrap.min.css">
+	<script src="./Health Dashboard_files/jquery.min.js.download"></script>
+	<script src="./Health Dashboard_files/popper.min.js.download"></script>
+	<script src="./Health Dashboard_files/bootstrap.min.js.download"></script>
+	<script src="./Health Dashboard_files/Chart.min.js.download"></script> 
+	<script src="./Health Dashboard_files/d3.v5.min.js.download"></script>
+
+	<style>
+		.jumbotron {background-image: url("https://image.shutterstock.com/image-photo/medical-staff-people-group-team-260nw-1202989183.jpg");
+				background-size: cover;}
+	</style>
+
+	<style type="text/css">/* Chart.js */
+	@keyframes chartjs-render-animation{from{opacity:.99}to{opacity:1}}.chartjs-render-monitor{animation:chartjs-render-animation 1ms}.chartjs-size-monitor,.chartjs-size-monitor-expand,.chartjs-size-monitor-shrink{position:absolute;direction:ltr;left:0;top:0;right:0;bottom:0;overflow:hidden;pointer-events:none;visibility:hidden;z-index:-1}.chartjs-size-monitor-expand>div{position:absolute;width:1000000px;height:1000000px;left:0;top:0}.chartjs-size-monitor-shrink>div{position:absolute;width:200%;height:200%;left:0;top:0}</style></head>
+	<body>
+
+		<div class="jumbotron text-center" style="margin-bottom:0">
+			<h1>HealthCare in Singapore</h1>
+			
+		</div>
+
+		<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+				<a class="navbar-brand" href="index.html">Home</a>
+				<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+				  <span class="navbar-toggler-icon"></span>
+				</button>
+				<div class="collapse navbar-collapse" id="collapsibleNavbar">
+				  <ul class="navbar-nav">
+					<li class="nav-item">
+					  <a class="nav-link" href="startPage.html">BMI Checker</a>
+					</li>
+					<li class="nav-item">
+					  <a class="nav-link" href="Health Dashboard.html">Disease Charts</a>
+					</li>
+				  </ul>
+				</div>  
+			  </nav>
+
+		<div class="container" style="margin-top:30px">
+			<div class="row">
+				<div class="col">
+				</div>
+				<div class="col-sm-8"><div class="chartjs-size-monitor"><div class="chartjs-size-monitor-expand"><div class=""></div></div><div class="chartjs-size-monitor-shrink"><div class=""></div></div></div><div class="chartjs-size-monitor"><div class="chartjs-size-monitor-expand"><div class=""></div></div><div class="chartjs-size-monitor-shrink"><div class=""></div></div></div>
+				<h2>Diseases Charts</h2>
+				<h5>Trends of non communicable diseases</h5>
+
+				<p>In singapore, there is a high prevelance rate chronic or non communicable diseases. In this section, we shall looking for trends and difference between diffrent sexes.
+				There are some interesting facts that can be seen. </p>
+				<br>
+
+
+				<canvas id="PrevelanceRate" width="821" height="461" style="display: block; height: 410px; width: 730px;" class="chartjs-render-monitor"></canvas>
+				<script>
+					new Chart(document.getElementById("PrevelanceRate"), {
+						type: 'bar',
+						data: {
+							labels: [1992, 1998, 2004, 2010, 2013, 2017],
+							datasets: [{ 
+								data: [18.3, 15.2, 12.6 ,14.3, 13.3, 12],
+								label: "Daily Smoker",
+								backgroundColor: "#3e95cd",
+								borderColor: "#808080",
+								borderWidth: 1
+							}, { 
+								data: [7.3, 7.4, 0, 7, 8.3, ,8.6],
+								label: "Diabetes",
+								backgroundColor: "#8e5ea2",
+								borderColor: "#808080",
+								borderWidth: 1
+							}, { 
+								data: [0, 0, 0, 25.2, 0, 33.6],
+								label: "Hyperlipidaemia",
+								backgroundColor: "#3cba9f",
+								borderColor: "#808080",
+								borderWidth: 1
+							}, { 
+								data: [16.1,21.5,20.1,18.9, ,21.5],
+								label: "Hypertension",
+								backgroundColor: "#e8c3b9",
+								borderColor: "#808080",
+								borderWidth: 1
+							}, { 
+								data: [5.1,6,6.9,10.8, 8.6, 8.7],
+								label: "Obesity",
+								backgroundColor: "#c45850",
+								borderColor: "#808080",
+								borderWidth: 1
+							}
+							]
+						},
+						options: {
+							scales:{
+								yAxes:[{
+									ticks:{
+										callback: function(value,index, values) {
+											return value +'%';
+										}
+										
+									}
+								}]
+							},
+							title: {
+								display: true,
+								text: 'Prevelance of Hypertension, Diabetes, High cholesterol, Obesity and Daily Smoking (in percentage)'
+							}
+						}
+					});
+				</script>
+
+				<br>
+
+				<canvas id="diabetes" width="821" height="461" style="display: block; height: 410px; width: 730px;" class="chartjs-render-monitor"></canvas>
+
+				<script type="text/javascript">
+
+					d3.csv('https://raw.githubusercontent.com/zychia/files/master/diabetes_1.csv')
+					.then(makeChart);
+
+
+					function makeChart(obj){
+
+
+						var yearlbl = obj.map(function(d){
+							return d.Year;
+						});
+
+
+						var dataMen = obj.map(function(d){
+							return d.MenDia;
+						});
+
+						var dataWomen = obj.map(function(d){
+							return d.WomenDia;
+						});
+
+
+
+						var ctx = document.getElementById('diabetes');
+						var chart = new Chart(ctx, {
+						// The type of chart we want to create
+						type: 'line',
+
+						// The data for our dataset
+						data: {
+							labels: yearlbl,
+							datasets: [{
+								label: 'Men',
+								backgroundColor: "#3e95cd",
+								borderColor: "#808080",
+								data: dataMen,
+								fill: true,
+								borderWidth: 1,
+								order: 2
+							},
+							{
+								label: 'Women',
+								backgroundColor: "#e8c3b9",
+								borderColor: "#808080",
+								data: dataWomen,
+								fill: true,
+								borderWidth: 1,
+								order: 1
+							}]
+						},
+
+						// Configuration options go here
+						options: {
+							scales:{
+								yAxes:[{
+									ticks:{
+
+										callback: function(value) {
+											var ranges = [
+											{ divider: 1e6, suffix: 'M' },
+											{ divider: 1e3, suffix: 'k' }
+											];
+											function formatNumber(n) {
+												for (var i = 0; i < ranges.length; i++) {
+													if (n >= ranges[i].divider) {
+														return (n / ranges[i].divider).toString() + ranges[i].suffix;
+													}
+												}
+												return n;
+											}
+											return formatNumber(value);
+										}
+									}
+								}]
+							},
+							title:{
+								display: true,
+								text: 'Number of adults with Diabetes in Singapore'
+							}
+						}
+					});
+
+					}
+
+					
+				</script>
+
+				<br>
+
+				<canvas id="Hypertension" width="821" height="461" style="display: block; height: 410px; width: 730px;" class="chartjs-render-monitor"></canvas>
+
+				<script type="text/javascript">
+
+					d3.csv('https://raw.githubusercontent.com/zychia/files/master/blood%20pressure.csv')
+					.then(makeChart);
+
+
+					function makeChart(obj){
+
+
+						var yearlbl = obj.map(function(d){
+							return d.Year;
+						});
+
+
+						var dataMen = obj.map(function(d){
+							return d.Man_no;
+						});
+
+						var dataWomen = obj.map(function(d){
+							return d.Female_no;
+						});
+
+
+
+						var ctx = document.getElementById('Hypertension');
+						var chart = new Chart(ctx, {
+						// The type of chart we want to create
+						type: 'line',
+
+						// The data for our dataset
+						data: {
+							labels: yearlbl,
+							datasets: [{
+								label: 'Men',
+								backgroundColor: "#3e95cd",
+								borderColor: "#808080",
+								data: dataMen,
+								fill: true,
+								borderWidth: 1,
+								order: 2
+							},
+							{
+								label: 'Women',
+								backgroundColor: "#e8c3b9",
+								borderColor: "#808080",
+								data: dataWomen,
+								fill: true,
+								borderWidth: 1,
+								order: 1
+							}]
+						},
+
+						// Configuration options go here
+						options: {
+							scales:{
+								yAxes:[{
+									ticks:{
+
+										callback: function(value) {
+											var ranges = [
+											{ divider: 1e6, suffix: 'M' },
+											{ divider: 1e3, suffix: 'k' }
+											];
+											function formatNumber(n) {
+												for (var i = 0; i < ranges.length; i++) {
+													if (n >= ranges[i].divider) {
+														return (n / ranges[i].divider).toString() + ranges[i].suffix;
+													}
+												}
+												return n;
+											}
+											return formatNumber(value);
+										}
+									}
+								}]
+							},
+							title:{
+								display: true,
+								text: 'Number of adults with High blood pressure (Hypertension) in Singapore'
+							}
+						}
+					});
+
+					}
+
+					
+				</script>
+				<br>
+				<canvas id="BMI" width="821" height="461" style="display: block; height: 410px; width: 730px;" class="chartjs-render-monitor"></canvas>
+
+				<script type="text/javascript">
+
+					d3.csv('https://raw.githubusercontent.com/zychia/files/master/BMI_SG.csv')
+					.then(makeChart);
+
+
+					function makeChart(obj){
+
+
+						var yearlbl = obj.map(function(d){
+							return d.Year;
+						});
+
+
+						var dataMen = obj.map(function(d){
+							return d.BMI_man;
+						});
+
+						var dataWomen = obj.map(function(d){
+							return d.BMI_woman;
+						});
+
+						var dataGirl = obj.map(function(d){
+							return d.girl_bmi;
+						});
+
+						var dataBoy = obj.map(function(d){
+							return d.boy_bmi;
+						});
+
+
+						var ctx = document.getElementById('BMI');
+						var chart = new Chart(ctx, {
+						// The type of chart we want to create
+						type: 'line',
+
+						// The data for our dataset
+						data: {
+							labels: yearlbl,
+							datasets: [{
+								label: 'Men',
+								backgroundColor: "#3e95cd",
+								borderColor: "#808080",
+								data: dataMen,
+								fill: true,
+								borderWidth: 1,
+								order: 2
+							},
+							{
+								label: 'Women',
+								backgroundColor: "#e8c3b9",
+								borderColor: "#808080",
+								data: dataWomen,
+								fill: true,
+								borderWidth: 1,
+								order: 1
+							},
+							{
+								type: 'bar',
+								label: 'Boy',
+								backgroundColor: "#3cba9f",
+								borderColor: "#808080",
+								data: dataBoy,
+								fill: true,
+								borderWidth: 1,
+								order: 4
+							},
+							{
+								label: 'Girl',
+								backgroundColor: "#c45850",
+								borderColor: "#808080",
+								data: dataGirl,
+								fill: false,
+								borderWidth: 1,
+								order: 3
+							}]
+						},
+
+						// Configuration options go here
+						options: {
+							scales:{
+								yAxes:[{
+									ticks:{
+
+										callback: function(value) {
+											var ranges = [
+											{ divider: 1e6, suffix: 'M' },
+											{ divider: 1e3, suffix: 'k' }
+											];
+											function formatNumber(n) {
+												for (var i = 0; i < ranges.length; i++) {
+													if (n >= ranges[i].divider) {
+														return (n / ranges[i].divider).toString() + ranges[i].suffix;
+													}
+												}
+												return n;
+											}
+											return formatNumber(value);
+										}
+									}
+								}]
+							},
+							title:{
+								display: true,
+								text: 'Mean BMI of adults adolescents and children in Singapore'
+							}
+						}
+					});
+					}	
+				</script>
+				
+				<p>Interesting BMI results between Man and Women. Before 1995, women has higher BMI than man; after 1995, the opposite is seen.</p>
+				<p>NB: Chart shows age-standardised data for adults 20 years and older, and for children and adolescents aged 5 to 19 years.</p>
+				<br>
+			</div>
+
+			<div class="col">
+			</div>
+
+
+	<div class="jumbotron text-center" style="margin-bottom:0">
+		<small>Banner and footer pictures are by shuttlecock</small>
+	</div>
+
+
+
+</body></html>
