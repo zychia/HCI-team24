@@ -1,2 +1,3 @@
 # team24_HCI
-final 
+
+To access the website, pls access https://github.com/zychia/HCI-team24
